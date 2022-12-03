@@ -42,16 +42,20 @@ impl From<&str> for Person {
         if p.len() != 2 {
             Person::default()
         }else{
-            let name = p[0].to_string();
-            let age = p[1].parse::<usize>();
-            if age.is_err() || name.is_empty()
-            {
-                return Person::default()
-            }else{
-                Person{name,  age:age.unwrap()}
+             match s.split_once(",") {
+             Some((first, second))  => {
+                if first.len() == 0{
+                    return Person::default()
+                }
+                match second.parse::<usize>(){
+                  Ok(age) => Person{name:first.to_string(),  age:age},
+                  Err(e) =>  Person::default(),
+                }
+             },
+             _ =>  Person::default()
             }
         }
-    }
+      }
 }
 
 fn main() {
